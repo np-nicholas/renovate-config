@@ -1,24 +1,52 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":dependencyDashboard"],
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard"
+  ],
   "timezone": "Asia/Bangkok",
-  "schedule": ["before 9am on monday"],
+  "schedule": [
+    "before 9am on monday"
+  ],
   "prConcurrentLimit": 5,
   "prHourlyLimit": 2,
   "osvVulnerabilityAlerts": true,
   "vulnerabilityAlerts": {
-    "schedule": ["at any time"],
-    "labels": ["security"]
+    "schedule": [
+      "at any time"
+    ],
+    "labels": [
+      "security"
+    ]
   },
-  "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"],
+  "postUpdateOptions": [
+    "gomodTidy",
+    "gomodUpdateImportPaths"
+  ],
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "groupName": "non-major deps"
     },
     {
-      "matchDatasources": ["docker"],
+      "matchDatasources": [
+        "docker"
+      ],
       "pinDigests": true
+    },
+    {
+      "description": "Auto-merge patch/pin/digest updates once CI is green",
+      "matchUpdateTypes": [
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
     }
-  ]
+  ],
+  "platformAutomerge": false,
+  "automergeType": "pr"
 }
