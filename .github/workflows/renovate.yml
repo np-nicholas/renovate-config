@@ -1,0 +1,33 @@
+name: Renovate
+
+on:
+  schedule:
+    - cron: "0 * * * *" # hourly; normal PRs still follow the preset schedule, security PRs go out anytime
+  workflow_dispatch:
+
+concurrency:
+  group: renovate
+  cancel-in-progress: false
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: 5899822
+          private-key: ${{ secrets.RENOVATE_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Run Renovate
+        uses: renovatebot/github-action@v46.3.6
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+        env:
+          LOG_LEVEL: debug
+          RENOVATE_PLATFORM_COMMIT: "enabled"
+          RENOVATE_AUTODISCOVER: "true"
+          RENOVATE_AUTODISCOVER_FILTER: "np-nicholas/renovate-poc-sample"
+          RENOVATE_ONBOARDING_CONFIG: '{"$schema":"https://docs.renovatebot.com/renovate-schema.json","extends":["local>np-nicholas/renovate-config"]}'
